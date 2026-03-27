@@ -1,5 +1,7 @@
 package timer;
 
-public class TimerFunc {
+/*FUNCION DEL TEMPORIZADOR*/
+
+public class TimerFunc {	
 
 }
