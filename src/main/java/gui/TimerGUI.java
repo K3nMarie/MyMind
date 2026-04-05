@@ -1,42 +1,82 @@
 package gui;
 
-import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.Font;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+import timer.TimerController;
 
 public class TimerGUI extends JFrame {
+/////////////
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+private JLabel label;
+    private JButton startButton;
+    private JTextField horasInput;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TimerGUI frame = new TimerGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    private TimerController controller;
 
-	/**
-	 * Create the frame.
-	 */
-	public TimerGUI() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
+    public TimerGUI() {
+        setTitle("Timer de Estudio");
+        setSize(300, 200);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLayout(new FlowLayout());
 
-	}
+        label = new JLabel("00:00");
+        label.setFont(new Font("Arial", Font.BOLD, 30));
 
+        horasInput = new JTextField(5);
+        horasInput.setText("1");
+
+        startButton = new JButton("Iniciar");
+
+        add(new JLabel("Horas de estudio:"));
+        add(horasInput);
+        add(startButton);
+        add(label);
+
+        // Crear controlador
+        controller = new TimerController(e -> actualizarVista());
+
+        startButton.addActionListener(e -> iniciarTimer());
+    }
+
+    private void iniciarTimer() {
+        int horas = Integer.parseInt(horasInput.getText());
+        controller.iniciar(horas);
+    }
+
+    private void actualizarVista() {
+        int tiempo = controller.getTiempoRestante();
+
+        int minutos = tiempo / 60;
+        int segundos = tiempo % 60;
+
+        label.setText(String.format("%02d:%02d", minutos, segundos));
+
+        // Eventos visuales
+        if (controller.isEnDescanso()) {
+            JOptionPane.showMessageDialog(this,
+                    "Descansa 5 minutos");
+        }
+
+        if (!controller.isEnDescanso() && tiempo == 30 * 60) {
+            JOptionPane.showMessageDialog(this,
+                    "Vuelve a estudiar");
+        }
+
+        if (controller.isTerminado()) {
+            JOptionPane.showMessageDialog(this,
+                    "Has terminado tu tiempo de estudio");
+        }
+    }
+
+    public static void main(String[] args) {
+        new TimerGUI().setVisible(true);
+    }
+    
 }

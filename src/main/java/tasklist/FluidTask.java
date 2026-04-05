@@ -2,7 +2,7 @@ package tasklist;
 
 /*FUNCIONALIDAD DE LAS TAREAS ESTATICAS*/
 
-public class FluidTask extends TaskListAbstract {
+public abstract class FluidTask extends TaskListAbstract {
 
 	String taskStatus; // No time limit, Pending, Done, Late
 	
@@ -10,6 +10,10 @@ public class FluidTask extends TaskListAbstract {
 	public FluidTask(String taskName, String taskDescription) {
 		super(taskName, taskDescription);
 		// TODO Auto-generated constructor stub
+		this.taskStatus= "pending";//Estado inicial por defecto 
 	}
-
+@Override
+public String toString() {
+	return "[Fluida]" + taskName + "-" + taskDescription + "(" + taskStatus + ")";
+}
 }
