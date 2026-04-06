@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -96,6 +98,13 @@ public class MainWindowGUI extends JFrame {
                 switchPanel(timerPanel);
             }
         });
+        btn.addActionListener(e -> {
+            if (text.equals("Calendario")) {
+                // Abrir CalendarioGUI con callback
+                CalendarGUI calendarPanel = new CalendarGUI(this, () -> switchPanel(placeholderPanel));
+                switchPanel(calendarPanel);
+            }
+        });
 
         return btn;
     }
@@ -124,6 +133,11 @@ public class MainWindowGUI extends JFrame {
         mainPanel = new JPanel(new BorderLayout());
 
         //PLACEHOLDER
+        
+        //CALENDAR BULLSHIT
+
+        //
+        
         placeholderPanel = new JPanel(new BorderLayout());
         JLabel placeholder = new JLabel("Main Content Area", SwingConstants.CENTER);
         placeholder.setFont(new Font("Segoe UI", Font.PLAIN, 18));
