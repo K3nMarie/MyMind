@@ -29,12 +29,9 @@ public class CalendarGUI extends JPanel {
      add(panel, BorderLayout.CENTER);
 
      backButton = new JButton("Volver");
-
      JPanel bottomPanel = new JPanel();
      bottomPanel.add(backButton);
-
      add(bottomPanel, BorderLayout.SOUTH);
-
      backButton.addActionListener(e -> {
          if (onBack != null) {
              onBack.run();
