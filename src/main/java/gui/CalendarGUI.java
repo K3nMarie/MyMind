@@ -25,7 +25,7 @@ public class CalendarGUI extends JPanel {
 
      // Usar fecha actual
      java.util.Calendar now = java.util.Calendar.getInstance();
-     int month = now.get(java.util.Calendar.MONTH); // 0-based, 0 = Enero
+     int month = now.get(java.util.Calendar.MONTH); //Mes
      int year = now.get(java.util.Calendar.YEAR); // Año
 
      CalendarFunc panel = new CalendarFunc(month, year); // calendario interactivo
@@ -43,6 +43,10 @@ public class CalendarGUI extends JPanel {
          }
      });
  }
+
+ public CalendarGUI() {
+	// TODO Auto-generated constructor stub
+}
 
  public void exitProcedure() {
      if (frame != null) {

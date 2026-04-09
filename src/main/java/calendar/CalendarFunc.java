@@ -83,6 +83,7 @@ public class CalendarFunc extends JPanel {
      JButton prevButton = new JButton("<"); //Boton para ir atras
      JButton nextButton = new JButton(">"); //Boton para ir delante
 
+     //Estilos
      JLabel label = new JLabel(monthNames[month] + " " + year, JLabel.CENTER);
      label.setForeground(SystemColor.activeCaption);
      label.setFont(new Font("Arial", Font.BOLD, 18));
@@ -120,15 +121,18 @@ public class CalendarFunc extends JPanel {
      return titlePanel;
  }
 
+ //Creacion de los dias
  protected JPanel createDaysGUI() {
      JPanel dayPanel = new JPanel(true);
-     dayPanel.setLayout(new GridLayout(0, dayNames.length));
+     dayPanel.setLayout(new GridLayout(0, dayNames.length)); //Crea una cuadricula con una longitud igual a los dias de la semana
 
+     //Calcula el dia de hoy
      Calendar today = Calendar.getInstance();
      int tMonth = today.get(Calendar.MONTH);
      int tYear = today.get(Calendar.YEAR);
      int tDay = today.get(Calendar.DAY_OF_MONTH);
-
+     
+     //Obtiene el primer dia del mes y año actual
      Calendar calendar = Calendar.getInstance();
      calendar.set(Calendar.MONTH, month);
      calendar.set(Calendar.YEAR, year);
@@ -138,16 +142,17 @@ public class CalendarFunc extends JPanel {
      iterator.add(Calendar.DAY_OF_MONTH,
              -(iterator.get(Calendar.DAY_OF_WEEK) - 1));
 
-     Calendar maximum = (Calendar) calendar.clone();
-     maximum.add(Calendar.MONTH, +1);
+     //Calcula el limite del mes
+     Calendar maximum = (Calendar) calendar.clone(); //Primer dia del mes siguiente
+     maximum.add(Calendar.MONTH, +1); 
 
      // Encabezados de días
-     for (int i = 0; i < dayNames.length; i++) {
+     for (int i = 0; i < dayNames.length; i++) { //Mientras i sea menor a los dias de la semana, i + 1
          JPanel dPanel = new JPanel(true);
          dPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-         JLabel dLabel = new JLabel(dayNames[i], JLabel.CENTER);
+         JLabel dLabel = new JLabel(dayNames[i], JLabel.CENTER); //Crea un label con el dia de la semana correspondiente al i actual
          dLabel.setFont(new Font("Arial", Font.BOLD, 14));
-         dPanel.setBackground(Color.LIGHT_GRAY); // gris suave
+         dPanel.setBackground(Color.LIGHT_GRAY);
          dPanel.add(dLabel);
          dayPanel.add(dPanel);
      }
@@ -168,21 +173,26 @@ public class CalendarFunc extends JPanel {
              int lDay = iterator.get(Calendar.DAY_OF_MONTH);
              dayLabel.setText(Integer.toString(lDay));
 
-             // Hacer clickeable
-             dPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+             // Permite hacer clicks en los dias (PARA EL DIARIO Y LISTA DE TAREAS)
+             dPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR)); //Hace que el cursor se vuelva la mano
+             //Event listener para un click
              dPanel.addMouseListener(new java.awt.event.MouseAdapter() {
                  public void mouseClicked(java.awt.event.MouseEvent e) {
+                	 
+                	 //PLACEHOLDER
                      javax.swing.JOptionPane.showMessageDialog(dPanel,
-                         "Día clickeado: " + lDay + "/" + (month+1) + "/" + year);
+                         "Día clickeado: " + lDay + "/" + (month+1) + "/" + year); 
+                     //
                  }
              });
 
-             // Hoy
+             // Marca el dia de hoy con el color naranja
              if ((tMonth == month) && (tYear == year) && (tDay == lDay)) {
                  dPanel.setBackground(Color.ORANGE);
+             // Marca los fines de semana con el color gris
              } else if ((iterator.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ||
                          iterator.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)) {
-                 dPanel.setBackground(new Color(220, 220, 220)); // fines de semana
+                 dPanel.setBackground(new Color(235, 235, 235)); // fines de semana
              } else {
                  dPanel.setBackground(Color.WHITE);
              }
@@ -198,6 +208,7 @@ public class CalendarFunc extends JPanel {
          count++;
      }
 
+     //Crea los bordes
      for (int i = count; i < limit; i++) {
          JPanel dPanel = new JPanel(true);
          dPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));

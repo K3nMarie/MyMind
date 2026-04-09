@@ -1,13 +1,17 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.SystemColor;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -136,6 +140,7 @@ public class MainWindowGUI extends JFrame {
         
         //CALENDAR BULLSHIT
         
+        
         //
         
         placeholderPanel = new JPanel(new BorderLayout());
@@ -170,3 +175,5 @@ public class MainWindowGUI extends JFrame {
         mainPanel.repaint();
     }
 }
+
+	
