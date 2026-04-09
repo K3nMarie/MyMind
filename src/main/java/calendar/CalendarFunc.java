@@ -178,8 +178,8 @@ public class CalendarFunc extends JPanel {
              //Event listener para un click
              dPanel.addMouseListener(new java.awt.event.MouseAdapter() {
                  public void mouseClicked(java.awt.event.MouseEvent e) {
-                	 
-                	 //PLACEHOLDER
+                     
+                     //PLACEHOLDER
                      javax.swing.JOptionPane.showMessageDialog(dPanel,
                          "Día clickeado: " + lDay + "/" + (month+1) + "/" + year); 
                      //

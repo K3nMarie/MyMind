@@ -22,6 +22,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import com.formdev.flatlaf.FlatLightLaf;
 
+import calendar.MainCalendar;
+
 public class MainWindowGUI extends JFrame {
 
     private static final long serialVersionUID = 1L;
@@ -97,17 +99,17 @@ public class MainWindowGUI extends JFrame {
         //Manejo practico de los botones
         btn.addActionListener(e -> {
             if (text.equals("Timer")) {
-                // Abrir TimerGUI con callback para regresar
                 TimerGUI timerPanel = new TimerGUI(() -> switchPanel(placeholderPanel));
                 switchPanel(timerPanel);
             }
         });
         btn.addActionListener(e -> {
-            if (text.equals("Calendario")) {
-                // Abrir CalendarioGUI con callback
-                CalendarGUI calendarPanel = new CalendarGUI(this, () -> switchPanel(placeholderPanel));
-                switchPanel(calendarPanel);
-            }
+        	if (text.equals("Calendario")) {
+        	    CalendarGUI calendarPanel = new CalendarGUI(this, () -> {
+        	        switchPanel(new MainCalendar());
+        	    });
+        	    switchPanel(calendarPanel);
+        	}
         });
 
         return btn;
@@ -136,19 +138,15 @@ public class MainWindowGUI extends JFrame {
     private void createMainPanel() {
         mainPanel = new JPanel(new BorderLayout());
 
-        //PLACEHOLDER
-        
-        //CALENDAR BULLSHIT
-        
-        
-        //
-        
+        // Weekly calendar as default view
+        MainCalendar weeklyCalendar = new MainCalendar();
+        mainPanel.add(weeklyCalendar, BorderLayout.CENTER);
+
+        // Placeholder saved for navigation
         placeholderPanel = new JPanel(new BorderLayout());
         JLabel placeholder = new JLabel("Main Content Area", SwingConstants.CENTER);
         placeholder.setFont(new Font("Segoe UI", Font.PLAIN, 18));
         placeholderPanel.add(placeholder, BorderLayout.CENTER);
-        mainPanel.add(placeholderPanel, BorderLayout.CENTER);
-        //
 
         contentPane.add(mainPanel, BorderLayout.CENTER);
     }
