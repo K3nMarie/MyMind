@@ -23,8 +23,12 @@ public class CalendarGUI extends JPanel {
      this.frame = frame;
      setLayout(new BorderLayout());
 
-     // Month is zero based
-     CalendarFunc panel = new CalendarFunc(3, 2026); // <- IMPLEMENTAR GETDATE AND GET TIME HERE!!!
+     // Usar fecha actual
+     java.util.Calendar now = java.util.Calendar.getInstance();
+     int month = now.get(java.util.Calendar.MONTH); // 0-based, 0 = Enero
+     int year = now.get(java.util.Calendar.YEAR); // Año
+
+     CalendarFunc panel = new CalendarFunc(month, year); // calendario interactivo
      
      add(panel, BorderLayout.CENTER);
 
@@ -32,6 +36,7 @@ public class CalendarGUI extends JPanel {
      JPanel bottomPanel = new JPanel();
      bottomPanel.add(backButton);
      add(bottomPanel, BorderLayout.SOUTH);
+   //Boton de regreso
      backButton.addActionListener(e -> {
          if (onBack != null) {
              onBack.run();

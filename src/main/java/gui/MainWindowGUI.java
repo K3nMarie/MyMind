@@ -135,7 +135,7 @@ public class MainWindowGUI extends JFrame {
         //PLACEHOLDER
         
         //CALENDAR BULLSHIT
-
+        
         //
         
         placeholderPanel = new JPanel(new BorderLayout());
