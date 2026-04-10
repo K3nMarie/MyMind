@@ -93,17 +93,17 @@ public class TaskListGUI extends JFrame {
 				panelSup.add(fila2);
 				contentPane.add(panelSup, BorderLayout.NORTH);
 
-				// --- TABLA ---
+				// esto es la tabla
 				model = new DefaultTableModel(new String[]{"ID", "Título", "Descripción", "Fecha", "Status"}, 0);
 				table = new JTable(model);
 				table.setRowHeight(25);
 				
-				// Aplicar colores según status
+				// esta parte le aplica el cambio de color al status de la tarea.
 				table.getColumnModel().getColumn(4).setCellRenderer(new StatusRenderer());
 				
 				contentPane.add(new JScrollPane(table), BorderLayout.CENTER);
 
-				// --- EVENTOS ---
+				// eventos 
 				
 				btnAgregar.addActionListener(e -> accionBotonAgregar());
 				
@@ -120,7 +120,8 @@ public class TaskListGUI extends JFrame {
 				actualizarTabla();
 			}
 
-			// Lógica de Agregar usando tus clases FluidTask y RepeatingTask
+			
+	//esta para es la que hagregar usando las clses FluiTask y RepeatingTAsk.
 			private void accionBotonAgregar() {
 				String nombre = txtTitulo.getText();
 				String desc = txtDesc.getText();
@@ -129,7 +130,7 @@ public class TaskListGUI extends JFrame {
 				
 				TaskListAbstract nuevaTarea;
 				
-				// Polimorfismo puro con tus clases
+				// Polimorfismo puro con  clases
 				if(tipo.equals("Fluida")) {
 					nuevaTarea = new FluidTask(nombre, desc);
 				} else {
@@ -148,7 +149,7 @@ public class TaskListGUI extends JFrame {
 				String sql = "DELETE FROM tareas WHERE id = ?";
 				// Usamos FluidTask temporalmente solo para obtener la conexión heredada
 				FluidTask temp = new FluidTask("", ""); 
-				try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/task_db", "root", "");
+				try (Connection con = DriverManager.getConnection("jdbc:mysql:", "root", " "); // donde dice jdbc:mysql saltan cosas que van realcionadas con la base de datos es como asi yo creo //localhost:3306/task_db
 					 PreparedStatement ps = con.prepareStatement(sql)) {
 					ps.setInt(1, id);
 					ps.executeUpdate();
@@ -160,7 +161,7 @@ public class TaskListGUI extends JFrame {
 			// Refrescar la tabla con los datos de MySQL
 			private void actualizarTabla() {
 				model.setRowCount(0);
-				try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/task_db", "root", "");
+				try (Connection con = DriverManager.getConnection("jdbc:mysql:", "root", "");// donde dice jdbc:mysql saltan cosas que van realcionadas con la base de datos
 					 Statement st = con.createStatement();
 					 ResultSet rs = st.executeQuery("SELECT * FROM tareas")) {
 					
@@ -179,6 +180,7 @@ public class TaskListGUI extends JFrame {
 			private void limpiarCampos() {
 				txtTitulo.setText(""); txtDesc.setText(""); txtFecha.setText("");
 			}
+			/*lo que va a continuacion no casi no lo entiedo*/
 
 			// Renderizador para los rectángulos de colores
 			class StatusRenderer extends DefaultTableCellRenderer {
