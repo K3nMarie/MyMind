@@ -250,7 +250,7 @@ public class CalendarFunc extends JPanel {
                      //
                  }
              });
-
+//
              // Marca el dia de hoy con el color naranja
              if ((tMonth == month) && (tYear == year) && (tDay == lDay)) {
                  dPanel.setBackground(Color.ORANGE);
