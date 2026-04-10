@@ -1,6 +1,12 @@
 package timemanagement;
 
-/*TOMAR LA FECHA DEL SISTEMA*/
-
 public interface GetDate {
+
+    int getDay();
+
+    int getMonth(); // 1–12
+
+    int getYear();
+
+    String getFullDate();
 }

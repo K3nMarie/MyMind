@@ -1,42 +1,42 @@
 package gui;
 
-import java.awt.EventQueue;
+import javax.swing.*;
+import java.awt.BorderLayout;
+import calendar.CalendarFunc;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+//Source - https://stackoverflow.com/a/17235350
+//Posted by Gilbert Le Blanc
+//Retrieved 2026-04-06, License - CC BY-SA 3.0
 
-public class CalendarGUI extends JFrame {
+public class CalendarGUI extends JPanel {
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+ private JFrame  frame;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CalendarGUI frame = new CalendarGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+ private JButton backButton; // Boton para regresar
+ 
+ public CalendarGUI(JFrame frame, Runnable onBack) {
+     this.frame = frame;
+     setLayout(new BorderLayout());
 
-	/**
-	 * Create the frame.
-	 */
-	public CalendarGUI() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
+     // Usar fecha actual
+     java.util.Calendar now = java.util.Calendar.getInstance();
+     int month = now.get(java.util.Calendar.MONTH); //Mes
+     int year = now.get(java.util.Calendar.YEAR); // Año
 
-	}
+     CalendarFunc panel = new CalendarFunc(month, year); // calendario interactivo
+     
+     add(panel, BorderLayout.CENTER);
+
+     backButton = new JButton("Volver");
+     JPanel bottomPanel = new JPanel();
+     bottomPanel.add(backButton);
+     add(bottomPanel, BorderLayout.SOUTH);
+   //Boton de regreso
+     backButton.addActionListener(e -> {
+         if (onBack != null) {
+             onBack.run();
+         }
+     });
+ }
 
 }

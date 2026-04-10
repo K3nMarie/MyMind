@@ -1,8 +1,12 @@
 package timemanagement;
 
-import java.time.LocalTime;
-
-/*TOMAR LA HORA DEL SISTEMA*/
-
 public interface GetTime {
+
+    int getHour();
+
+    int getMinute();
+
+    int getSecond();
+
+    String getTime(); // formato HH:mm:ss
 }

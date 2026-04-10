@@ -1,6 +1,5 @@
 package timer;
 
-
 import javax.swing.Timer;
 import java.awt.event.ActionListener;
 
@@ -13,7 +12,7 @@ public class TimerController {
 
     private boolean enDescanso = false;
 
-    private final int BLOQUE_ESTUDIO = 30 * 60; //esta es la parte de el tiempo de estudio, toma un break cada 30 minutos  
+    private final int BLOQUE_ESTUDIO = 30 * 60; // esta es la parte de el tiempo de estudio, toma un break cada 30 minutos  
     private final int DESCANSO = 5 * 60; // lo mismo de arriba pero aplicado a decanso.
 
     private ActionListener callback; // callback esta hecha para poder comunicar esto con lo que se encuentra en el gui
@@ -63,6 +62,10 @@ public class TimerController {
 
     public int getTiempoRestante() {
         return tiempoRestante;
+    }
+
+    public int getTiempoTotal() {
+        return tiempoTotal;
     }
 
     public boolean isEnDescanso() {
