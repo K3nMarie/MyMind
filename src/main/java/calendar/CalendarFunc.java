@@ -9,6 +9,7 @@ import timemanagement.GetTime;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.SystemColor;
@@ -16,6 +17,7 @@ import java.awt.Font;
 import java.util.Calendar;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -59,7 +61,48 @@ public class CalendarFunc extends JPanel {
      revalidate();
      repaint();
  }
+///////////////
 
+ 
+// quita las /* para que se ejecute, se los puse por que nome permite hacer el commit 
+/*
+/// 
+ private java.util.List<String> getTasksForDate(int day, int month, int year) {
+	    java.util.List<String> tareas = new java.util.ArrayList<>();
+
+	    String fechaBuscada = String.format("%02d/%02d/%04d", day, month + 1, year);
+
+	    String sql = "SELECT titulo FROM tareas WHERE due_date = ?";
+
+	    try (
+	        java.sql.Connection con = java.sql.DriverManager.getConnection(
+	            "jdbc:mysql://localhost:3306/task_db",
+	            "root",
+	            ""
+	        );
+	        java.sql.PreparedStatement ps = con.prepareStatement(sql)
+	    ) {
+
+	        ps.setString(1, fechaBuscada);
+
+	        java.sql.ResultSet rs = ps.executeQuery();
+
+	        while (rs.next()) {
+	            tareas.add(rs.getString("titulo"));
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return tareas;
+	}*/
+/// 
+/// 
+/// 
+/// 
+
+ 
  //Crea la GUI de los meses
  protected JPanel createGUI() {
      JPanel monthPanel = new JPanel(true);
@@ -123,7 +166,10 @@ public class CalendarFunc extends JPanel {
 
  //Creacion de los dias
  protected JPanel createDaysGUI() {
+	 ///////
+	// JPanel dayPanel = new JPanel(new BorderLayout());
      JPanel dayPanel = new JPanel(true);
+     //////
      dayPanel.setLayout(new GridLayout(0, dayNames.length)); //Crea una cuadricula con una longitud igual a los dias de la semana
 
      //Calcula el dia de hoy
@@ -163,8 +209,9 @@ public class CalendarFunc extends JPanel {
      while (iterator.getTimeInMillis() < maximum.getTimeInMillis()) {
          int lMonth = iterator.get(Calendar.MONTH);
          int lYear = iterator.get(Calendar.YEAR);
-
-         JPanel dPanel = new JPanel(true);
+////// esta parte es esencial para modificar la parte de los dias.
+         JPanel dPanel = new JPanel(new BorderLayout());
+ //////        
          dPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
          JLabel dayLabel = new JLabel("", JLabel.CENTER);
          dayLabel.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -172,7 +219,25 @@ public class CalendarFunc extends JPanel {
          if ((lMonth == month) && (lYear == year)) {
              int lDay = iterator.get(Calendar.DAY_OF_MONTH);
              dayLabel.setText(Integer.toString(lDay));
+///////////
+             java.util.List<String> tareasDelDia = getTasksForDate(lDay, month, year);
 
+             if (!tareasDelDia.isEmpty()) {
+                 JPanel tareasPanel = new JPanel();
+                 tareasPanel.setLayout(new BoxLayout(tareasPanel, BoxLayout.Y_AXIS));
+                 tareasPanel.setOpaque(false);
+
+                 for (String tarea : tareasDelDia) {
+                     JLabel tareaLabel = new JLabel(tarea);
+                     tareaLabel.setFont(new Font("Arial", Font.PLAIN, 9));
+                     tareaLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                     tareasPanel.add(tareaLabel);
+                 }
+
+                 dPanel.add(tareasPanel, BorderLayout.CENTER);
+             }
+/// 
              // Permite hacer clicks en los dias (PARA EL DIARIO Y LISTA DE TAREAS)
              dPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR)); //Hace que el cursor se vuelva la mano
              //Event listener para un click
@@ -185,7 +250,7 @@ public class CalendarFunc extends JPanel {
                      //
                  }
              });
-
+//
              // Marca el dia de hoy con el color naranja
              if ((tMonth == month) && (tYear == year) && (tDay == lDay)) {
                  dPanel.setBackground(Color.ORANGE);
@@ -215,7 +280,7 @@ public class CalendarFunc extends JPanel {
          JLabel dayLabel = new JLabel(" ", JLabel.CENTER);
          dayLabel.setFont(new Font("Arial", Font.PLAIN, 14));
          dPanel.setBackground(Color.WHITE);
-         dPanel.add(dayLabel);
+         dPanel.add(dayLabel, BorderLayout.NORTH );
          dayPanel.add(dPanel);
      }
 
