@@ -62,10 +62,10 @@ public class CalendarFunc extends JPanel {
      repaint();
  }
 ///////////////
-/// 
-/// 
-/// 
-/// 
+
+ 
+// quita las /* para que se ejecute, se los puse por que nome permite hacer el commit 
+/*
 /// 
  private java.util.List<String> getTasksForDate(int day, int month, int year) {
 	    java.util.List<String> tareas = new java.util.ArrayList<>();
@@ -96,13 +96,13 @@ public class CalendarFunc extends JPanel {
 	    }
 
 	    return tareas;
-	}
+	}*/
 /// 
 /// 
 /// 
 /// 
-/// 
-/// 
+
+ 
  //Crea la GUI de los meses
  protected JPanel createGUI() {
      JPanel monthPanel = new JPanel(true);
