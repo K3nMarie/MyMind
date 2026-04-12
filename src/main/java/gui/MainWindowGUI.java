@@ -23,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import calendar.MainCalendar;
+//import gui.TaskListGUI;
 
 public class MainWindowGUI extends JFrame {
 
@@ -32,6 +33,7 @@ public class MainWindowGUI extends JFrame {
     private JPanel sidebar;
     private JPanel topbar;
     private JPanel mainPanel;
+    private JLabel placeholder ;
 
     private boolean isSidebarVisible = false;
 
@@ -110,7 +112,22 @@ public class MainWindowGUI extends JFrame {
         	    });
         	    switchPanel(calendarPanel);
         	}
+        });        
+        
+        ///////////
+        
+     // Manejo de la lista de tares
+          ///////////
+       btn.addActionListener(e -> {
+           if (text.equals("Tareas")) {
+               TaskListGUI taskList = new TaskListGUI(); 
+                    switchPanel(placeholderPanel);
+                 
+                 switchPanel(taskList);
+           }
         });
+
+        
 
         return btn;
     }
@@ -144,7 +161,7 @@ public class MainWindowGUI extends JFrame {
 
         // Placeholder saved for navigation
         placeholderPanel = new JPanel(new BorderLayout());
-        JLabel placeholder = new JLabel("Main Content Area", SwingConstants.CENTER);
+        placeholder = new JLabel("Main Content Area", SwingConstants.CENTER); 
         placeholder.setFont(new Font("Segoe UI", Font.PLAIN, 18));
         placeholderPanel.add(placeholder, BorderLayout.CENTER);
 

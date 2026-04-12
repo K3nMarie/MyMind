@@ -11,7 +11,7 @@ import calendar.CalendarFunc;
 public class CalendarGUI extends JPanel {
 
  private JFrame  frame;
-
+private JPanel bottomPanel;
  private JButton backButton; // Boton para regresar
  
  public CalendarGUI(JFrame frame, Runnable onBack) {
@@ -28,7 +28,7 @@ public class CalendarGUI extends JPanel {
      add(panel, BorderLayout.CENTER);
 
      backButton = new JButton("Volver");
-     JPanel bottomPanel = new JPanel();
+     bottomPanel = new JPanel();
      bottomPanel.add(backButton);
      add(bottomPanel, BorderLayout.SOUTH);
    //Boton de regreso

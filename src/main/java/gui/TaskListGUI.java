@@ -30,7 +30,7 @@ import tasklist.FluidTask;
 import tasklist.RepeatingTask;
 import tasklist.TaskListAbstract;
 
-public class TaskListGUI extends JFrame {
+public class TaskListGUI extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -38,10 +38,10 @@ public class TaskListGUI extends JFrame {
 	private JTable table;
 	private DefaultTableModel model;
 	private JComboBox<String> comboTipo;
-
-	/**
+ /*
+	
 	 * Launch the application.
-	 */
+	 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -54,17 +54,18 @@ public class TaskListGUI extends JFrame {
 			}
 		});
 	}
-
-	/**
-	 * Create the frame.
-	 */
+	*/
+//	 * Create the frame.
+	 
 	public TaskListGUI() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setLayout(new BorderLayout());
+		//setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(0, 0));
+		//setContentPane(contentPane);
+		
+		contentPane.setLayout(new BorderLayout());
+		add(contentPane,BorderLayout.CENTER );
 		
 		
 		// --- PANEL SUPERIOR (Inputs) ---
@@ -120,8 +121,17 @@ public class TaskListGUI extends JFrame {
 				actualizarTabla();
 			}
 
-			
-	//esta para es la que hagregar usando las clses FluiTask y RepeatingTAsk.
+///////
+///
+  /*
+	public TaskListGUI(MainWindowGUI mainWindowGUI, Object object) {
+		// TODO Auto-generated constructor stub
+	}
+	*/
+ 
+
+			///////
+			//esta para es la que hagregar usando las clses FluiTask y RepeatingTAsk.
 			private void accionBotonAgregar() {
 				String nombre = txtTitulo.getText();
 				String desc = txtDesc.getText();
@@ -161,7 +171,7 @@ public class TaskListGUI extends JFrame {
 			// Refrescar la tabla con los datos de MySQL
 			private void actualizarTabla() {
 				model.setRowCount(0);
-				try (Connection con = DriverManager.getConnection("jdbc:mysql:", "root", "");// donde dice jdbc:mysql saltan cosas que van realcionadas con la base de datos
+				try (Connection con = DriverManager.getConnection("jdbc:mysql:", "root", "");// donde dice jdbc:mysql faltan cosas que van realcionadas con la base de datos
 					 Statement st = con.createStatement();
 					 ResultSet rs = st.executeQuery("SELECT * FROM tareas")) {
 					
