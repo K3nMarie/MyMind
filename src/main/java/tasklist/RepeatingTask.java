@@ -1,18 +1,17 @@
 package tasklist;
 
+import java.time.LocalDate;
+
 public class RepeatingTask extends TaskListAbstract {
 
-    String dueDate;
-    String taskStatus;
+	protected LocalDate dueDate;
 
-    public RepeatingTask(String taskName, String taskDescription, String dueDate) {
-        super(taskName, taskDescription);
-        this.dueDate = dueDate;
-        this.taskStatus = "sin hacer";
-    }
+	public RepeatingTask(String taskName, String taskDescription, LocalDate dueDate) {
+	    super(taskName, taskDescription, dueDate);
+	}
 
     public String getStatus() { return taskStatus; }
-    public String getDueDate() { return dueDate; }
+    public LocalDate getDueDate() { return dueDate; }
 
     @Override
     public String getDetails() {

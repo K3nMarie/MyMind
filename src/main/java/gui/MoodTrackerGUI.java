@@ -2,8 +2,6 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
-import java.util.Map;
 
 import moodtracker.MoodTrackerFunc;
 
@@ -49,13 +47,14 @@ public class MoodTrackerGUI extends JPanel {
         JScrollPane scroll = new JScrollPane(cardsPanel);
         add(scroll, BorderLayout.CENTER);
 
-        // Eventos
+        // 🔘 Eventos
         saveButton.addActionListener(e -> {
             String mood = moodInput.getText();
 
-            if (!mood.isEmpty()) {
+            if (!mood.trim().isEmpty()) {
                 moodFunc.addMood(mood);
                 moodInput.setText("");
+                moodInput.requestFocus(); // UX improvement
                 refreshCards();
             }
         });
@@ -69,10 +68,34 @@ public class MoodTrackerGUI extends JPanel {
     private void refreshCards() {
         cardsPanel.removeAll();
 
-        Map<String, List<String>> data = moodFunc.getMoodByDay();
+        java.util.List<MoodTrackerFunc.MoodEntry> data = moodFunc.getMoods();
 
-        for (String day : data.keySet()) {
-            cardsPanel.add(createDayCard(day, data.get(day)));
+        // Lista de días ya mostrados
+        java.util.List<java.time.LocalDate> shownDays = new java.util.ArrayList<>();
+
+        // Mostrar desde el más reciente
+        for (int i = data.size() - 1; i >= 0; i--) {
+            MoodTrackerFunc.MoodEntry entry = data.get(i);
+
+            java.time.LocalDate date = entry.getTimestamp().toLocalDate();
+
+            // Si el día no se ha mostrado aún
+            if (!shownDays.contains(date)) {
+                shownDays.add(date);
+
+                // Crear lista de moods para ese día
+                java.util.List<MoodTrackerFunc.MoodEntry> dayMoods = new java.util.ArrayList<>();
+
+                for (int j = data.size() - 1; j >= 0; j--) {
+                    MoodTrackerFunc.MoodEntry e = data.get(j);
+
+                    if (e.getTimestamp().toLocalDate().equals(date)) {
+                        dayMoods.add(e);
+                    }
+                }
+
+                cardsPanel.add(createDayCard(date, dayMoods));
+            }
         }
 
         cardsPanel.revalidate();
@@ -80,21 +103,28 @@ public class MoodTrackerGUI extends JPanel {
     }
 
     // 🧾 Crear carta por día
-    private JPanel createDayCard(String day, List<String> moods) {
+    private JPanel createDayCard(
+            java.time.LocalDate date,
+            java.util.List<MoodTrackerFunc.MoodEntry> moods
+    ) {
 
         JPanel card = new JPanel();
         card.setLayout(new BorderLayout());
         card.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        card.setMaximumSize(new Dimension(Integer.MAX_VALUE, 120));
+        card.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
 
-        JLabel title = new JLabel(day);
+        JLabel title = new JLabel(date.toString());
         title.setFont(new Font("Segoe UI", Font.BOLD, 14));
 
         JPanel moodList = new JPanel();
         moodList.setLayout(new BoxLayout(moodList, BoxLayout.Y_AXIS));
 
-        for (String m : moods) {
-            moodList.add(new JLabel("• " + m));
+        java.time.format.DateTimeFormatter formatter =
+                java.time.format.DateTimeFormatter.ofPattern("HH:mm");
+
+        for (MoodTrackerFunc.MoodEntry entry : moods) {
+            String time = entry.getTimestamp().format(formatter);
+            moodList.add(new JLabel("• " + time + " - " + entry.getMood()));
         }
 
         card.add(title, BorderLayout.NORTH);

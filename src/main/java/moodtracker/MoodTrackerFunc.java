@@ -1,31 +1,50 @@
 package moodtracker;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MoodTrackerFunc {
 
-    // Día → lista de registros
-    private Map<String, List<String>> moodByDay;
+    // 🔹 Inner class (represents a DB row)
+    public static class MoodEntry {
+        private int id;
+        private LocalDateTime timestamp;
+        private String mood;
+
+        public MoodEntry(int id, LocalDateTime timestamp, String mood) {
+            this.id = id;
+            this.timestamp = timestamp;
+            this.mood = mood;
+        }
+
+        public int getId() { return id; }
+        public LocalDateTime getTimestamp() { return timestamp; }
+        public String getMood() { return mood; }
+    }
+
+    // 🔹 Store entries properly (not Map<String, List<String>> anymore)
+    private List<MoodEntry> moods;
+    private int nextId;
 
     public MoodTrackerFunc() {
-        moodByDay = new LinkedHashMap<>();
+        moods = new ArrayList<>();
+        nextId = 1;
     }
 
+    // ✅ Add mood (structured, not String formatting)
     public void addMood(String mood) {
-        LocalDateTime now = LocalDateTime.now();
+        MoodEntry entry = new MoodEntry(
+            nextId++,
+            LocalDateTime.now(),
+            mood
+        );
 
-        String day = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        String time = now.format(DateTimeFormatter.ofPattern("HH:mm"));
-
-        String entry = time + " - " + mood;
-
-        moodByDay.putIfAbsent(day, new ArrayList<>());
-        moodByDay.get(day).add(entry);
+        moods.add(entry);
     }
 
-    public Map<String, List<String>> getMoodByDay() {
-        return moodByDay;
+    // ✅ Return structured data
+    public List<MoodEntry> getMoods() {
+        return moods;
     }
 }

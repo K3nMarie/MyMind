@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -78,22 +79,37 @@ public class TaskListGUI extends JPanel {
             if (onBack != null) onBack.run();
         });
 
-        add(backButton, BorderLayout.SOUTH); // ✅ FIX
+        add(backButton, BorderLayout.SOUTH);
     }
 
     private void accionBotonAgregar() {
 
         String nombre = txtTitulo.getText();
         String desc = txtDesc.getText();
-        String fecha = txtFecha.getText();
+        String fechaTexto = txtFecha.getText();
         String tipo = (String) comboTipo.getSelectedItem();
+
+        if (nombre.trim().isEmpty() || desc.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Título y descripción son obligatorios");
+            return;
+        }
 
         TaskListAbstract nuevaTarea;
 
         if (tipo.equals("Fluida")) {
-            nuevaTarea = new FluidTask(nombre, desc, fecha);
+
+            nuevaTarea = new FluidTask(nombre, desc, null);
+
         } else {
-            nuevaTarea = new RepeatingTask(nombre, desc, fecha);
+
+            try {
+                java.time.LocalDate fecha = java.time.LocalDate.parse(fechaTexto);
+                nuevaTarea = new RepeatingTask(nombre, desc, fecha);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Fecha inválida (formato: yyyy-MM-dd)");
+                return;
+            }
         }
 
         tareas.add(nuevaTarea);
@@ -126,11 +142,10 @@ public class TaskListGUI extends JPanel {
 
             TaskListAbstract t = tareas.get(i);
 
-            String fecha = "";
+            LocalDate fecha = null;
             String status = "";
 
             if (t instanceof FluidTask) {
-                fecha = ((FluidTask) t).getDueDate();
                 status = ((FluidTask) t).getStatus();
             } else if (t instanceof RepeatingTask) {
                 fecha = ((RepeatingTask) t).getDueDate();
