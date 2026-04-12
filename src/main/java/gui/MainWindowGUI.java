@@ -1,17 +1,11 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.SystemColor;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -19,7 +13,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
+
 import com.formdev.flatlaf.FlatLightLaf;
 
 import calendar.MainCalendar;
@@ -62,6 +58,7 @@ public class MainWindowGUI extends JFrame {
         createSidebar();
         createTopbar();
         createMainPanel();
+
         contentPane.remove(sidebar); // Sidebar hidden by default
     }
 
@@ -82,6 +79,7 @@ public class MainWindowGUI extends JFrame {
         //Botones de la barra lateral
         sidebar.add(createNavButton("Calendario"));
         sidebar.add(createNavButton("Tareas"));
+        sidebar.add(createNavButton("Journal"));
         sidebar.add(createNavButton("Moodtracker"));
         sidebar.add(createNavButton("Timer"));
         sidebar.add(createNavButton("Configuracion"));
@@ -97,25 +95,44 @@ public class MainWindowGUI extends JFrame {
         btn.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         //Manejo practico de los botones
-        btn.addActionListener(e -> {
-            if (text.equals("Timer")) {
-                TimerGUI timerPanel = new TimerGUI(() -> switchPanel(placeholderPanel));
-                switchPanel(timerPanel);
-            }
-        });
-        btn.addActionListener(e -> {
-        	if (text.equals("Calendario")) {
-        	    CalendarGUI calendarPanel = new CalendarGUI(this, () -> {
-        	        switchPanel(new MainCalendar());
-        	    });
-        	    switchPanel(calendarPanel);
-        	}
-        });
+        btn.addActionListener(e -> handleNavigation(text));
 
         return btn;
     }
 
+    //Centraliza la logica de navegacion (mejor mantenimiento)
+    private void handleNavigation(String text) {
+
+        switch (text) {
+            case "Timer":
+                switchPanel(new TimerGUI(() -> switchPanel(new MainCalendar())));
+                break;
+
+            case "Calendario":
+                switchPanel(new CalendarGUI(() -> switchPanel(new MainCalendar())));
+                break;
+
+            case "Journal":
+                switchPanel(new JournalGUI(() -> switchPanel(new MainCalendar())));
+                break;
+
+            case "Moodtracker":
+                switchPanel(new MoodTrackerGUI(() -> switchPanel(new MainCalendar())));
+                break;
+
+            case "Tareas":
+                switchPanel(new TaskListGUI(() -> switchPanel(new MainCalendar())));
+                break;
+
+            case "Configuracion":
+                switchPanel(placeholderPanel);
+                break;
+        }
+    }
+
     //Manejo de la barra superior
+    private JLabel clockLabel;
+
     private void createTopbar() {
         topbar = new JPanel(new BorderLayout());
         topbar.setPreferredSize(new Dimension(0, 50));
@@ -127,9 +144,18 @@ public class MainWindowGUI extends JFrame {
 
         JLabel welcomeLabel = new JLabel("Bienvenido");
         welcomeLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        // ⏰ Reloj
+        clockLabel = new JLabel();
+        clockLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        clockLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+
+        startClock();
 
         topbar.add(toggleBtn, BorderLayout.WEST);
         topbar.add(welcomeLabel, BorderLayout.CENTER);
+        topbar.add(clockLabel, BorderLayout.EAST);
 
         contentPane.add(topbar, BorderLayout.NORTH);
     }
@@ -138,11 +164,9 @@ public class MainWindowGUI extends JFrame {
     private void createMainPanel() {
         mainPanel = new JPanel(new BorderLayout());
 
-        // Weekly calendar as default view
         MainCalendar weeklyCalendar = new MainCalendar();
         mainPanel.add(weeklyCalendar, BorderLayout.CENTER);
 
-        // Placeholder saved for navigation
         placeholderPanel = new JPanel(new BorderLayout());
         JLabel placeholder = new JLabel("Main Content Area", SwingConstants.CENTER);
         placeholder.setFont(new Font("Segoe UI", Font.PLAIN, 18));
@@ -172,6 +196,12 @@ public class MainWindowGUI extends JFrame {
         mainPanel.revalidate();
         mainPanel.repaint();
     }
+    
+    private void startClock() {
+        Timer timer = new Timer(1000, e -> {
+            java.time.LocalTime now = java.time.LocalTime.now();
+            clockLabel.setText(now.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss")));
+        });
+        timer.start();
+    }
 }
-
-	

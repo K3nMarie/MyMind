@@ -1,42 +1,60 @@
 package gui;
 
-import java.awt.EventQueue;
+import java.awt.BorderLayout;
+import java.awt.Font;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.*;
 
-public class JournalGUI extends JFrame {
+public class JournalGUI extends JPanel {
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+    private JTextField titleField;
+    private JTextArea contentArea;
+    private JButton saveButton;
+    private JButton backButton;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					JournalGUI frame = new JournalGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    private Runnable onBack;
 
-	/**
-	 * Create the frame.
-	 */
-	public JournalGUI() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
+    public JournalGUI(Runnable onBack) {
+        this.onBack = onBack;
 
-	}
+        setLayout(new BorderLayout());
+        createUI();
+    }
 
+    private void createUI() {
+
+        //Titulo
+        titleField = new JTextField();
+        titleField.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        titleField.setBorder(BorderFactory.createTitledBorder("Titulo"));
+
+        //Contenido
+        contentArea = new JTextArea();
+        contentArea.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        JScrollPane scroll = new JScrollPane(contentArea);
+        scroll.setBorder(BorderFactory.createTitledBorder("Contenido"));
+
+        //Boton guardar
+        saveButton = new JButton("Guardar");
+
+        saveButton.addActionListener(e -> {
+            String title = titleField.getText();
+            JOptionPane.showMessageDialog(this,
+                "Entrada guardada:\n" + title);
+        });
+
+        //Boton volver
+        backButton = new JButton("Volver");
+        backButton.addActionListener(e -> {
+            if (onBack != null) onBack.run();
+        });
+
+        JPanel bottom = new JPanel();
+        bottom.add(saveButton);
+        bottom.add(backButton);
+
+        add(titleField, BorderLayout.NORTH);
+        add(scroll, BorderLayout.CENTER);
+        add(bottom, BorderLayout.SOUTH);
+    }
 }

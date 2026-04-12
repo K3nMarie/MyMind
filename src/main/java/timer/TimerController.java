@@ -2,6 +2,7 @@ package timer;
 
 import javax.swing.Timer;
 import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TimerController {
 
@@ -24,7 +25,12 @@ public class TimerController {
     }
 
     public void iniciar(int horas) {
-        tiempoTotal = horas * 3600; // esta parte es  la cantidad de segundos que tiene una hora, se hace asi por que el timer funciona con segundos 
+
+        if (timer.isRunning()) {
+            timer.stop(); // evita multiples timers
+        }
+
+        tiempoTotal = horas * 3600; 
         tiempoRestante = BLOQUE_ESTUDIO;
         enDescanso = false;
 
@@ -32,11 +38,11 @@ public class TimerController {
     }
 
     private void tick() {
-        tiempoRestante--; /// esta parte es la que permite que en el gui el clock valle al revez (no se como explicarlo).
-        tiempoTotal--;// lo mismo de arriba
+        tiempoRestante--; 
+        tiempoTotal--;
 
-        // Notificar a la GUI
-        callback.actionPerformed(null);
+        // Notificar a la GUI (mejor que null)
+        callback.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "tick"));
 
         if (tiempoRestante <= 0) {
 
