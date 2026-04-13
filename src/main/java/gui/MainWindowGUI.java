@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import calendar.MainCalendar;
+//import gui.TaskListGUI;
 
 public class MainWindowGUI extends JFrame {
 
@@ -28,6 +29,7 @@ public class MainWindowGUI extends JFrame {
     private JPanel sidebar;
     private JPanel topbar;
     private JPanel mainPanel;
+    private JLabel placeholder ;
 
     private boolean isSidebarVisible = false;
 
@@ -170,7 +172,7 @@ public class MainWindowGUI extends JFrame {
 
         //Panel placeholder para secciones no implementadas
         placeholderPanel = new JPanel(new BorderLayout());
-        JLabel placeholder = new JLabel("Main Content Area", SwingConstants.CENTER);
+        placeholder = new JLabel("Main Content Area", SwingConstants.CENTER); 
         placeholder.setFont(new Font("Segoe UI", Font.PLAIN, 18));
         placeholderPanel.add(placeholder, BorderLayout.CENTER);
 
