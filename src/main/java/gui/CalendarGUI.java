@@ -10,34 +10,35 @@ import calendar.CalendarFunc;
 
 public class CalendarGUI extends JPanel {
 
- private JFrame frame;
+    private JFrame frame;
 
- private JButton backButton; //Boton para volver a la vista anterior
- 
- //Constructor (recibe la accion que se ejecuta al volver)
- public CalendarGUI(Runnable onBack) {
-     setLayout(new BorderLayout());
+    private JButton backButton; //Boton para volver a la vista anterior
 
-     //Obtiene la fecha actual para inicializar el calendario
-     java.util.Calendar now = java.util.Calendar.getInstance();
-     int month = now.get(java.util.Calendar.MONTH);
-     int year = now.get(java.util.Calendar.YEAR);
+    //Constructor (recibe la accion que se ejecuta al volver)
+    public CalendarGUI(Runnable onBack) {
+        setLayout(new BorderLayout());
 
-     //Crea el calendario interactivo con el mes actual
-     CalendarFunc panel = new CalendarFunc(month, year);
-     
-     add(panel, BorderLayout.CENTER);
+        //Obtiene la fecha actual para inicializar el calendario
+        java.util.Calendar now = java.util.Calendar.getInstance();
+        int month = now.get(java.util.Calendar.MONTH);
+        int year = now.get(java.util.Calendar.YEAR);
 
-     backButton = new JButton("Volver");
-     bottomPanel = new JPanel();
-     bottomPanel.add(backButton);
-     add(bottomPanel, BorderLayout.SOUTH);
+        //Crea el calendario interactivo con el mes actual
+        CalendarFunc panel = new CalendarFunc(month, year);
+        
+        add(panel, BorderLayout.CENTER);
 
-     //Boton de regreso
-     backButton.addActionListener(e -> {
-         if (onBack != null) {
-             onBack.run();
-         }
-     });
- }
+        backButton = new JButton("Volver");
+
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.add(backButton);
+        add(bottomPanel, BorderLayout.SOUTH);
+
+        //Boton de regreso
+        backButton.addActionListener(e -> {
+            if (onBack != null) {
+                onBack.run();
+            }
+        });
+    }
 }
