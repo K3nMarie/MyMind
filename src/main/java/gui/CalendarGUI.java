@@ -12,17 +12,19 @@ public class CalendarGUI extends JPanel {
 
  private JFrame frame;
 
- private JButton backButton; // Boton para regresar
+ private JButton backButton; //Boton para volver a la vista anterior
  
+ //Constructor (recibe la accion que se ejecuta al volver)
  public CalendarGUI(Runnable onBack) {
      setLayout(new BorderLayout());
 
-     // Usar fecha actual
+     //Obtiene la fecha actual para inicializar el calendario
      java.util.Calendar now = java.util.Calendar.getInstance();
      int month = now.get(java.util.Calendar.MONTH);
      int year = now.get(java.util.Calendar.YEAR);
 
-     CalendarFunc panel = new CalendarFunc(month, year); // calendario interactivo
+     //Crea el calendario interactivo con el mes actual
+     CalendarFunc panel = new CalendarFunc(month, year);
      
      add(panel, BorderLayout.CENTER);
 

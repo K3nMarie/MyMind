@@ -6,13 +6,13 @@ import javax.swing.*;
 
 public class MainCalendar extends JPanel {
 
-    private int weekOffset = 0; // Permite moverse entre semanas
+    private int weekOffset = 0; // Permite moverse entre semanas (offset relativo a la actual)
     private JPanel mainPanel;
 
-    //Index de los dias
+    //Index de los dias (empieza en Domingo)
     String[] dayNames = { "D", "L", "M", "M", "J", "V", "S" };
 
-    //Index de los meses
+    //Index de los meses (0 = Enero, 11 = Diciembre)
     String[] monthNames = { 
         "Enero", "Febrero", "Marzo", 
         "Abril", "Mayo", "Junio", 
@@ -20,7 +20,7 @@ public class MainCalendar extends JPanel {
         "Octubre", "Noviembre", "Diciembre"       
     };
 
-    //Constructor
+    //Constructor (inicializa la vista semanal)
     public MainCalendar() {
         setLayout(new BorderLayout());
 
@@ -37,7 +37,7 @@ public class MainCalendar extends JPanel {
         repaint();
     }
 
-    //Crea la GUI principal
+    //Crea la GUI principal (contenedor centrado)
     private JPanel createGUI() {
 
         JPanel container = new JPanel(new GridBagLayout());
@@ -64,14 +64,14 @@ public class MainCalendar extends JPanel {
 
         Calendar today = Calendar.getInstance();
 
-        //Clona la fecha actual
+        //Clona la fecha actual y aplica el offset de semanas
         Calendar current = (Calendar) today.clone();
         current.add(Calendar.WEEK_OF_YEAR, weekOffset);
 
         int month = current.get(Calendar.MONTH);
         int year = current.get(Calendar.YEAR);
 
-        //Calcula la semana dentro del mes (1-5)
+        //Calcula la semana dentro del mes (rango aproximado 1-5)
         int weekOfMonth = current.get(Calendar.WEEK_OF_MONTH);
 
         JLabel title = new JLabel(
@@ -81,13 +81,13 @@ public class MainCalendar extends JPanel {
 
         title.setFont(new Font("Arial", Font.BOLD, 16));
 
-        //Funcion del boton hacia atras
+        //Funcion del boton hacia atras (resta una semana)
         prev.addActionListener(e -> {
             weekOffset--;
             refreshCalendar();
         });
 
-        //Funcion del boton hacia adelante
+        //Funcion del boton hacia adelante (suma una semana)
         next.addActionListener(e -> {
             weekOffset++;
             refreshCalendar();
@@ -100,14 +100,15 @@ public class MainCalendar extends JPanel {
         return panel;
     }
 
-    //Crea los dias de la semana
+    //Crea los dias de la semana (vista semanal)
     private JPanel createWeekGUI() {
 
-        JPanel panel = new JPanel(new GridLayout(2, 7)); //1 fila dias + 1 fila numeros
+        //Grid de 2 filas: encabezados + dias
+        JPanel panel = new JPanel(new GridLayout(2, 7));
 
         Calendar today = Calendar.getInstance();
 
-        //Obtiene el inicio de la semana (Domingo)
+        //Obtiene el inicio de la semana (Domingo como base)
         Calendar start = (Calendar) today.clone();
         start.add(Calendar.WEEK_OF_YEAR, weekOffset);
         start.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
@@ -119,11 +120,12 @@ public class MainCalendar extends JPanel {
             panel.add(label);
         }
 
-        //Iterador de dias
+        //Iterador para recorrer los 7 dias
         Calendar iter = (Calendar) start.clone();
 
         for (int i = 0; i < 7; i++) {
 
+            //Cada panel representa un dia
             JPanel dayPanel = new JPanel(new BorderLayout());
             dayPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
@@ -143,7 +145,7 @@ public class MainCalendar extends JPanel {
 
             dayPanel.add(label, BorderLayout.CENTER);
 
-            //Permite hacer click en los dias
+            //Permite hacer click en los dias (PLACEHOLDER)
             dayPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
             dayPanel.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent e) {

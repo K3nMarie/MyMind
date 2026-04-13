@@ -31,7 +31,7 @@ public class MainWindowGUI extends JFrame {
 
     private boolean isSidebarVisible = false;
 
-    private JPanel placeholderPanel; // Placeholder panel to return to
+    private JPanel placeholderPanel; //Panel placeholder para vistas no implementadas
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
@@ -45,7 +45,7 @@ public class MainWindowGUI extends JFrame {
         });
     }
 
-    //Ventana principal
+    //Ventana principal (configuracion base)
     public MainWindowGUI() {
         setTitle("MyMind"); //Titulo de la app
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -59,10 +59,10 @@ public class MainWindowGUI extends JFrame {
         createTopbar();
         createMainPanel();
 
-        contentPane.remove(sidebar); // Sidebar hidden by default
+        contentPane.remove(sidebar); //Sidebar oculta por defecto
     }
 
-    //Barra lateral
+    //Barra lateral (menu de navegacion)
     private void createSidebar() {
         sidebar = new JPanel();
         sidebar.setPreferredSize(new Dimension(200, 0));
@@ -76,7 +76,7 @@ public class MainWindowGUI extends JFrame {
         sidebar.add(title);
         sidebar.add(Box.createRigidArea(new Dimension(0, 20)));
 
-        //Botones de la barra lateral
+        //Botones de la barra lateral (navegacion principal)
         sidebar.add(createNavButton("Calendario"));
         sidebar.add(createNavButton("Tareas"));
         sidebar.add(createNavButton("Journal"));
@@ -87,20 +87,20 @@ public class MainWindowGUI extends JFrame {
         contentPane.add(sidebar, BorderLayout.WEST);
     }
 
-    //Botones de navegacion
+    //Crea botones reutilizables para navegacion
     private JButton createNavButton(String text) {
         JButton btn = new JButton(text);
         btn.setFocusPainted(false);
         btn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         btn.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        //Manejo practico de los botones
+        //Maneja el click
         btn.addActionListener(e -> handleNavigation(text));
 
         return btn;
     }
 
-    //Centraliza la logica de navegacion (mejor mantenimiento)
+    //Logica de navegacion
     private void handleNavigation(String text) {
 
         switch (text) {
@@ -130,7 +130,7 @@ public class MainWindowGUI extends JFrame {
         }
     }
 
-    //Manejo de la barra superior
+    //Manejo de la barra superior (menu + titulo + reloj)
     private JLabel clockLabel;
 
     private void createTopbar() {
@@ -146,7 +146,7 @@ public class MainWindowGUI extends JFrame {
         welcomeLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        // ⏰ Reloj
+        //Reloj en tiempo real (se actualiza cada segundo)
         clockLabel = new JLabel();
         clockLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         clockLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -160,13 +160,15 @@ public class MainWindowGUI extends JFrame {
         contentPane.add(topbar, BorderLayout.NORTH);
     }
 
-    //Creacion del panel principal
+    //Creacion del panel principal (contenido dinamico)
     private void createMainPanel() {
         mainPanel = new JPanel(new BorderLayout());
 
+        //Vista inicial: calendario semanal
         MainCalendar weeklyCalendar = new MainCalendar();
         mainPanel.add(weeklyCalendar, BorderLayout.CENTER);
 
+        //Panel placeholder para secciones no implementadas
         placeholderPanel = new JPanel(new BorderLayout());
         JLabel placeholder = new JLabel("Main Content Area", SwingConstants.CENTER);
         placeholder.setFont(new Font("Segoe UI", Font.PLAIN, 18));
@@ -175,7 +177,7 @@ public class MainWindowGUI extends JFrame {
         contentPane.add(mainPanel, BorderLayout.CENTER);
     }
 
-    //Manejo de la barra lateral
+    //Muestra u oculta la barra lateral
     private void toggleSidebar() {
         if (isSidebarVisible) {
             contentPane.remove(sidebar);
@@ -189,7 +191,7 @@ public class MainWindowGUI extends JFrame {
         contentPane.repaint();
     }
 
-    //Permite cambiar paneles
+    //Cambia el panel central (navegacion entre vistas)
     private void switchPanel(JPanel panel) {
         mainPanel.removeAll();
         mainPanel.add(panel, BorderLayout.CENTER);
@@ -197,6 +199,7 @@ public class MainWindowGUI extends JFrame {
         mainPanel.repaint();
     }
     
+    //Inicia el reloj que se actualiza cada segundo
     private void startClock() {
         Timer timer = new Timer(1000, e -> {
             java.time.LocalTime now = java.time.LocalTime.now();

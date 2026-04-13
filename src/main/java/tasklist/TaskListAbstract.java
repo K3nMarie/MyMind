@@ -22,6 +22,5 @@ public abstract class TaskListAbstract {
     public String getTaskName() { return taskName; }
     public String getTaskDescription() { return taskDescription; }
 
-    // Ahora ya NO guarda en DB
     public abstract String getDetails();
 }

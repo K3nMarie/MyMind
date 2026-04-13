@@ -14,6 +14,7 @@ public class JournalGUI extends JPanel {
 
     private Runnable onBack;
 
+    //Constructor (recibe la accion para volver a la vista anterior)
     public JournalGUI(Runnable onBack) {
         this.onBack = onBack;
 
@@ -21,20 +22,21 @@ public class JournalGUI extends JPanel {
         createUI();
     }
 
+    //Crea toda la interfaz del journal
     private void createUI() {
 
-        //Titulo
+        //Titulo (campo para escribir el titulo de la entrada)
         titleField = new JTextField();
         titleField.setFont(new Font("Segoe UI", Font.BOLD, 16));
         titleField.setBorder(BorderFactory.createTitledBorder("Titulo"));
 
-        //Contenido
+        //Contenido (area principal del texto con scroll)
         contentArea = new JTextArea();
         contentArea.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         JScrollPane scroll = new JScrollPane(contentArea);
         scroll.setBorder(BorderFactory.createTitledBorder("Contenido"));
 
-        //Boton guardar
+        //Boton guardar (PLACEHOLDER)
         saveButton = new JButton("Guardar");
 
         saveButton.addActionListener(e -> {

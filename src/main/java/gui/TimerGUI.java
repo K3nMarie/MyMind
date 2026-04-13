@@ -13,10 +13,11 @@ import javax.swing.border.EmptyBorder;
 import timer.TimerController;
 
 public class TimerGUI extends JPanel {
+
 /////////////
 
-    private JLabel label;         // Muestra tiempo total restante
-    private JLabel labelParcial;  // Muestra tiempo para el siguiente descanso/estudio
+    private JLabel label;         //Muestra el tiempo total restante
+    private JLabel labelParcial;  //Muestra el tiempo hasta el siguiente descanso/estudio
     private JButton startButton;
     private JTextField horasInput;
 
@@ -25,9 +26,9 @@ public class TimerGUI extends JPanel {
     private CircularProgressBar progressBar;
     private int tiempoInicial;
 
-    private JButton backButton; // Boton para regresar
+    private JButton backButton; //Boton para volver al panel anterior
 
-    // Callback para regresar al panel principal
+    //Callback para volver a la vista principal
     private Runnable onBack;
 
     private boolean mensajeDescansoMostrado = false;
@@ -35,7 +36,7 @@ public class TimerGUI extends JPanel {
     public TimerGUI(Runnable onBack) {
         this.onBack = onBack;
 
-        //Estilos
+        //Estilos base del panel
         JPanel panel = this;
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(new EmptyBorder(20, 20, 20, 20));
@@ -49,7 +50,7 @@ public class TimerGUI extends JPanel {
         label.setFont(new Font("Segoe UI", Font.BOLD, 40));
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        labelParcial = new JLabel("Próximo descanso en: 00:00");
+        labelParcial = new JLabel("Proximo descanso en: 00:00");
         labelParcial.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         labelParcial.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -64,7 +65,7 @@ public class TimerGUI extends JPanel {
         JLabel inputLabel = new JLabel("Horas de estudio:");
         inputLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Boton para regresar al panel principal
+        //Boton para volver al panel principal
         backButton = new JButton("Regresar");
         backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         backButton.addActionListener(e -> {
@@ -84,7 +85,7 @@ public class TimerGUI extends JPanel {
         panel.add(Box.createRigidArea(new Dimension(0, 15)));
         panel.add(backButton);
 
-        // Crear controlador
+        //Inicializa el controlador del timer
         controller = new TimerController(e -> actualizarVista());
 
         startButton.addActionListener(e -> iniciarTimer());
@@ -96,7 +97,7 @@ public class TimerGUI extends JPanel {
 
         tiempoInicial = horas * 3600;
 
-        // Al iniciar, mostrar barra llena (100%)
+        //Al iniciar, la barra empieza llena
         progressBar.setProgress(100);
         mensajeDescansoMostrado = false;
     }
@@ -105,12 +106,12 @@ public class TimerGUI extends JPanel {
         int tiempoTotal = controller.getTiempoTotal();
         int tiempoParcial = controller.getTiempoRestante();
 
-        // Tiempo total restante
+        //Tiempo total restante
         int minTotal = tiempoTotal / 60;
         int segTotal = tiempoTotal % 60;
         label.setText(String.format("Tiempo total: %02d:%02d", minTotal, segTotal));
 
-        // Tiempo para siguiente descanso o estudio
+        //Tiempo hasta el siguiente descanso o bloque
         int minParcial = tiempoParcial / 60;
         int segParcial = tiempoParcial % 60;
 
@@ -120,33 +121,36 @@ public class TimerGUI extends JPanel {
             labelParcial.setText(String.format("Tiempo hasta próximo descanso: %02d:%02d", minParcial, segParcial));
         }
 
-        // Actualizar barra circular (comienza llena y se vacía)
+        //Actualiza la barra de progreso (va disminuyendo)
         if (tiempoInicial > 0) {
             int progreso = (int) ((tiempoTotal / (double) tiempoInicial) * 100);
             progressBar.setProgress(progreso);
         }
 
+        //Mensaje cuando entra en descanso
         if (controller.isEnDescanso() && !mensajeDescansoMostrado) {
             JOptionPane.showMessageDialog(this, "Descansa 5 minutos");
             mensajeDescansoMostrado = true;
         }
 
+        //Mensaje cuando vuelve a estudiar
         if (!controller.isEnDescanso() && mensajeDescansoMostrado) {
             JOptionPane.showMessageDialog(this, "Vuelve a estudiar");
             mensajeDescansoMostrado = false;
         }
 
+        //Mensaje final del timer
         if (controller.isTerminado()) {
             JOptionPane.showMessageDialog(this, "Has terminado tu tiempo de estudio");
         }
     }
 
-    //Crear barra circular
+    //Barra circular de progreso
     class CircularProgressBar extends JPanel {
         private int progress = 0;
 
         public void setProgress(int progress) {
-            this.progress = Math.min(100, Math.max(0, progress)); // asegurar rango 0-100
+            this.progress = Math.min(100, Math.max(0, progress)); //limita entre 0 y 100
             repaint();
         }
 
@@ -162,12 +166,12 @@ public class TimerGUI extends JPanel {
             int x = (getWidth() - size) / 2;
             int y = (getHeight() - size) / 2;
 
-            // Background
+            //Fondo del circulo
             g2.setColor(new Color(220, 220, 220));
             g2.setStroke(new BasicStroke(10, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
             g2.drawOval(x, y, size, size);
 
-            // Progress
+            //Progreso del circulo
             g2.setColor(new Color(100, 150, 255));
             int angle = (int) (360 * (progress / 100.0));
             g2.drawArc(x, y, size, size, 90, -angle);

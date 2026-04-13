@@ -2,15 +2,15 @@ package journal;
 
 import java.time.LocalDate;
 
-/*FUNCIONALIDAD DEL DIARIO*/
+/*FUNCIONALIDAD DEL DIARIO (modelo de datos para las entradas)*/
 
 public class JournalFunc {
     
     //Atributos
-    int id; //puse id para que la base de datos pueda indentificar las tareas del diario 
-    String entryTitle; //El titulo de la entrada de diario
-    String entryContent; //El contenido de la entrada de diario
-    private LocalDate entryDate; //Fecha de la entrada (IMPORTANTE)
+    int id; //ID para que la base de datos identifique cada entrada
+    String entryTitle; //Titulo de la entrada del diario
+    String entryContent; //Contenido principal de la entrada
+    private LocalDate entryDate; //Fecha de la entrada (clave para agrupar o filtrar)
 
     public JournalFunc() {
         
@@ -22,7 +22,7 @@ public class JournalFunc {
         this.entryDate = date;
     }
 
-    //Metodos
+    //Metodos (getters y setters)
     public int getId() { return id; }
 
     public void setId(int id) {
