@@ -10,7 +10,7 @@ import javax.swing.table.DefaultTableModel;
 
 import moodtracker.MoodTrackerFunc;
 
-/* MANEJA LAS FUNCIONES DE LA BASE DE DATOS (CRUD de tasks, moods y journal) */
+/* MANEJA LAS FUNCIONES DE LA BASE DE DATOS */
 public class DatabaseManager {
 
     //

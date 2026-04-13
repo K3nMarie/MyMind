@@ -202,7 +202,7 @@ public class CalendarFunc extends JPanel {
                  }
              });
 
-             //Colores originales
+             //Colores
              if ((tMonth == month) && (tYear == year) && (tDay == lDay)) {
                  dPanel.setBackground(Color.ORANGE);
              } else if (iterator.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ||

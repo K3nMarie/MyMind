@@ -1,10 +1,21 @@
 package gui;
 
-import java.awt.*;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.time.LocalDate;
+import java.awt.FlowLayout;
 import java.time.format.DateTimeFormatter;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import database.DatabaseManager;
@@ -28,13 +39,12 @@ public class TaskListGUI extends JPanel {
         actualizarTabla();
     }
 
-    // ================= UI =================
     private void createUI() {
 
-        // ================= TOP PANEL =================
+
         JPanel topPanel = new JPanel(new GridLayout(2, 1, 5, 5));
 
-        // ---------- ROW 1 (ADD TASK) ----------
+
         JPanel fila1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 5));
 
         txtTitulo = new JTextField(8);
@@ -56,7 +66,7 @@ public class TaskListGUI extends JPanel {
         fila1.add(comboTipo);
         fila1.add(btnAgregar);
 
-        // ---------- ROW 2 (DELETE TASK) ----------
+
         JPanel fila2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 5));
 
         txtIdBorrar = new JTextField(5);
@@ -73,7 +83,7 @@ public class TaskListGUI extends JPanel {
 
         add(topPanel, BorderLayout.NORTH);
 
-        // ================= TABLE =================
+        
         model = new DefaultTableModel(
                 new String[]{"ID", "Título", "Descripción", "Fecha", "Status", "Tipo"}, 0
         );
@@ -84,7 +94,7 @@ public class TaskListGUI extends JPanel {
 
         add(new JScrollPane(table), BorderLayout.CENTER);
 
-        // ================= BOTTOM =================
+        //bottom panel
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         bottom.setPreferredSize(new Dimension(0, 45));
 
@@ -97,7 +107,6 @@ public class TaskListGUI extends JPanel {
         add(bottom, BorderLayout.SOUTH);
     }
 
-    // ================= ADD TASK =================
     private void accionBotonAgregar() {
 
         String nombre = txtTitulo.getText();
@@ -130,7 +139,6 @@ public class TaskListGUI extends JPanel {
         limpiarCampos();
     }
 
-    // ================= DELETE TASK =================
     private void borrarTarea() {
 
         try {
@@ -147,7 +155,6 @@ public class TaskListGUI extends JPanel {
         }
     }
 
-    // ================= LOAD TABLE =================
     private void actualizarTabla() {
 
         model.setRowCount(0);
@@ -159,7 +166,6 @@ public class TaskListGUI extends JPanel {
         model.fireTableDataChanged();
     }
 
-    // ================= CLEAN FIELDS =================
     private void limpiarCampos() {
         txtTitulo.setText("");
         txtDesc.setText("");
