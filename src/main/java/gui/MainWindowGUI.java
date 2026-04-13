@@ -112,9 +112,7 @@ public class MainWindowGUI extends JFrame {
         	    });
         	    switchPanel(calendarPanel);
         	}
-        });        
-        
-        ///////////
+        });
         
      // Manejo de la lista de tares
           ///////////
@@ -126,6 +124,12 @@ public class MainWindowGUI extends JFrame {
                  switchPanel(taskList);
            }
         });
+       btn.addActionListener(e->{
+    	  if (text.equals("Moodtracker")) {
+    		  MoodTrackerGUI moodPanel = new MoodTrackerGUI();
+    		  switchPanel(moodPanel);
+    	  }
+       });
 
         
 
