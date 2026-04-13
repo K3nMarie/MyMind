@@ -10,18 +10,17 @@ import javax.swing.table.DefaultTableModel;
 
 import moodtracker.MoodTrackerFunc;
 
-/* MANEJA LAS FUNCIONES DE LA BASE DE DATOS (CRUD de tasks y registro de moods) */
+/* MANEJA LAS FUNCIONES DE LA BASE DE DATOS (CRUD de tasks, moods y journal) */
 public class DatabaseManager {
 
     //
     //
     // TASKS
 
-    //Inserta una nueva tarea en la base de datos
+    //Inserta una nueva tarea
     public void addTask(String name, String desc, String status, String type, LocalDate dueDate) {
 
-        String sql = "INSERT INTO tasks (task_name, task_description, task_status, task_type, due_date) " +
-                     "VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO tasks (task_name, task_description, task_status, task_type, due_date) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -39,7 +38,32 @@ public class DatabaseManager {
         }
     }
 
-    //Elimina una tarea por su ID
+    //Carga todas las tareas
+    public void loadTasks(DefaultTableModel model) {
+
+        String sql = "SELECT * FROM tasks";
+
+        try (Connection conn = DatabaseConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getInt("id"),
+                    rs.getString("task_name"),
+                    rs.getString("task_description"),
+                    rs.getDate("due_date"),
+                    rs.getString("task_status"),
+                    rs.getString("task_type")
+                });
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+  //Elimina una tarea por su ID
     public void deleteTask(int id) {
 
         String sql = "DELETE FROM tasks WHERE id = ?";
@@ -55,60 +79,11 @@ public class DatabaseManager {
         }
     }
 
-    //Actualiza todos los campos de una tarea existente
-    public void updateTask(int id, String name, String desc, String status, String type, LocalDate dueDate) {
-
-        String sql = "UPDATE tasks SET task_name = ?, task_description = ?, task_status = ?, task_type = ?, due_date = ? " +
-                     "WHERE id = ?";
-
-        try (Connection conn = DatabaseConnector.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, name);
-            stmt.setString(2, desc);
-            stmt.setString(3, status);
-            stmt.setString(4, type);
-            stmt.setDate(5, Date.valueOf(dueDate));
-            stmt.setInt(6, id);
-
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //Carga todas las tareas y las agrega a la tabla (DefaultTableModel)
-    public void loadTasks(DefaultTableModel model) {
-
-        String sql = "SELECT * FROM tasks";
-
-        try (Connection conn = DatabaseConnector.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            //Recorre los resultados y arma cada fila
-            while (rs.next()) {
-                model.addRow(new Object[]{
-                        rs.getInt("id"),
-                        rs.getString("task_name"),
-                        rs.getString("task_description"),
-                        rs.getDate("due_date"),
-                        rs.getString("task_status"),
-                        rs.getString("task_type")
-                });
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     //
     //
     // MOODTRACKER
 
-    //Guarda un nuevo estado de animo con timestamp actual
+    //Guarda un estado de ánimo
     public void logMood(String mood) {
 
         String sql = "INSERT INTO moodtracker (mood_time, mood) VALUES (?, ?)";
@@ -126,7 +101,7 @@ public class DatabaseManager {
         }
     }
 
-    //Obtiene todos los moods ordenados por fecha
+    //Obtiene lista de moods
     public List<MoodTrackerFunc.MoodEntry> getMoods() {
 
         List<MoodTrackerFunc.MoodEntry> list = new ArrayList<>();
@@ -137,14 +112,12 @@ public class DatabaseManager {
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
-            //Convierte cada fila en un objeto MoodEntry
             while (rs.next()) {
-
-                int id = rs.getInt("id");
-                String mood = rs.getString("mood");
-                LocalDateTime time = rs.getTimestamp("mood_time").toLocalDateTime();
-
-                list.add(new MoodTrackerFunc.MoodEntry(id, time, mood));
+                list.add(new MoodTrackerFunc.MoodEntry(
+                    rs.getInt("id"),
+                    rs.getTimestamp("mood_time").toLocalDateTime(),
+                    rs.getString("mood")
+                ));
             }
 
         } catch (SQLException e) {
@@ -153,30 +126,46 @@ public class DatabaseManager {
 
         return list;
     }
-    
+
     //
     //
-    //Journal
-    //Permite escribir nuevas entradas
-    public static void logEntry(String entryTitle,String entryContent,LocalDate entryDate) {
-    	
-    	String sql = "INSERT INTO journal (title, content, entry_date) VALUES (?, ?, ?)";
-    	
-    	try (Connection conn = DatabaseConnector.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
+    // JOURNAL
 
-    		java.util.Date utilDate = new java.util.Date();
-    		java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-    		
-               stmt.setString(1, entryTitle);
-               stmt.setString(2, entryContent);
-               stmt.setDate(3, sqlDate);
+    //Inserta una nueva entrada
+    public static void logEntry(String title, String content, LocalDate date) {
 
-               stmt.executeUpdate();
+        String sql = "INSERT INTO journal (title, content, entry_date) VALUES (?, ?, ?)";
 
-           } catch (SQLException e) {
-               e.printStackTrace();
-           }
-    	
+        try (Connection conn = DatabaseConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, title);
+            stmt.setString(2, content);
+            stmt.setDate(3, Date.valueOf(date));
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Actualiza una entrada existente
+    public static void updateEntry(int id, String title, String content) {
+
+        String sql = "UPDATE journal SET title = ?, content = ? WHERE id = ?";
+
+        try (Connection conn = DatabaseConnector.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, title);
+            stmt.setString(2, content);
+            stmt.setInt(3, id);
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

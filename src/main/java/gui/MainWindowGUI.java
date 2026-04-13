@@ -103,19 +103,25 @@ public class MainWindowGUI extends JFrame {
     }
 
     //Logica de navegacion
+
     private void handleNavigation(String text) {
 
         switch (text) {
+
+        case "Calendario":
+            switchPanel(new CalendarGUI(() -> switchPanel(new MainCalendar())));
+            break;
+
             case "Timer":
                 switchPanel(new TimerGUI(() -> switchPanel(new MainCalendar())));
                 break;
 
-            case "Calendario":
-                switchPanel(new CalendarGUI(() -> switchPanel(new MainCalendar())));
-                break;
-
             case "Journal":
-                switchPanel(new JournalGUI(() -> switchPanel(new MainCalendar())));
+                //Abre el journal del día actual
+                switchPanel(new JournalGUI(
+                    () -> switchPanel(new MainCalendar()),
+                    java.time.LocalDate.now()
+                ));
                 break;
 
             case "Moodtracker":
@@ -194,7 +200,7 @@ public class MainWindowGUI extends JFrame {
     }
 
     //Cambia el panel central (navegacion entre vistas)
-    private void switchPanel(JPanel panel) {
+    public void switchPanel(JPanel panel) {
         mainPanel.removeAll();
         mainPanel.add(panel, BorderLayout.CENTER);
         mainPanel.revalidate();
