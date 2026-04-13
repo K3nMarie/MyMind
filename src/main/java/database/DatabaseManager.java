@@ -157,6 +157,7 @@ public class DatabaseManager {
     //
     //
     //Journal
+    //Permite escribir nuevas entradas
     public static void logEntry(String entryTitle,String entryContent,LocalDate entryDate) {
     	
     	String sql = "INSERT INTO journal (title, content, entry_date) VALUES (?, ?, ?)";
