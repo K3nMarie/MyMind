@@ -153,4 +153,29 @@ public class DatabaseManager {
 
         return list;
     }
+    
+    //
+    //
+    //Journal
+    public static void logEntry(String entryTitle,String entryContent,LocalDate entryDate) {
+    	
+    	String sql = "INSERT INTO journal (title, content, entry_date) VALUES (?, ?, ?)";
+    	
+    	try (Connection conn = DatabaseConnector.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+    		java.util.Date utilDate = new java.util.Date();
+    		java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+    		
+               stmt.setString(1, entryTitle);
+               stmt.setString(2, entryContent);
+               stmt.setDate(3, sqlDate);
+
+               stmt.executeUpdate();
+
+           } catch (SQLException e) {
+               e.printStackTrace();
+           }
+    	
+    }
 }

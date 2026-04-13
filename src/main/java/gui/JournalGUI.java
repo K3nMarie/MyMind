@@ -5,6 +5,8 @@ import java.awt.Font;
 
 import javax.swing.*;
 
+import database.DatabaseManager;
+
 public class JournalGUI extends JPanel {
 
     private JTextField titleField;
@@ -41,8 +43,9 @@ public class JournalGUI extends JPanel {
 
         saveButton.addActionListener(e -> {
             String title = titleField.getText();
-            JOptionPane.showMessageDialog(this,
-                "Entrada guardada:\n" + title);
+            String content = contentArea.getText();
+            
+            DatabaseManager.logEntry(title, content, null);
         });
 
         //Boton volver
